@@ -5,3 +5,8 @@ export interface UserLogin {
     password: string;
 }
 
+export interface Note {
+    noteid?: number;
+    title: string;
+    text: string;
+}

@@ -3,6 +3,7 @@ import { LazyExoticComponent } from "react";
 import { HomePage } from "../pages/HomePage";
 import { NotesPage } from "../pages/NotesPage";
 import { CalendarPage } from '../pages/CalendarPage';
+import { TodoListPage } from "../pages/TodoListPage";
 
 type JSXComponent = () => JSX.Element
 
@@ -22,8 +23,13 @@ export const routes: Route[] = [
         component: HomePage
     },
     {
+        name: 'Todo list',
+        path: '/to-do',
+        component: TodoListPage
+    },
+    {
         name: 'My notes',
-        path: '/notes',
+        path: '/notes/',
         component: NotesPage
     },
     {

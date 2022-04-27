@@ -8,11 +8,15 @@ export const NotesPage = () => {
 
     const [showNotes, setShowNotes] = useState(true);
 
-
     const onShowNotes = () => {
 
         setShowNotes(!showNotes);
     }
+
+    
+    // const onSelectNote = (note: Note) => {
+    //     setSelectedNote(note);
+    // }
 
     return (
         <div className='container-fluid float-container mt-5'>

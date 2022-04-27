@@ -14,7 +14,14 @@ export const useForm = <T>(initialState: T) => {
         }))
     }
 
+    const onChangeTextArea = (ev: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const { name, value } = ev.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }))
 
+    }
     const onChangeFile = async (ev: React.ChangeEvent<HTMLInputElement>) => {
         ev.preventDefault();
         const { name } = ev.target;
@@ -60,6 +67,7 @@ export const useForm = <T>(initialState: T) => {
         onChangeForm,
         isNotEmpty,
         onChangeFile,
+        onChangeTextArea,
         formData
     }
 
