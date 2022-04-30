@@ -5,6 +5,7 @@ export const HomePage = () => {
 
   const { auth } = useContext(AuthContext);
 
+  console.log(auth);
   const onUpdateUser = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
   }

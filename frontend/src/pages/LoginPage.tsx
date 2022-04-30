@@ -8,18 +8,18 @@ export const LoginPage = () => {
   const { login } = useContext(AuthContext);
 
   const { formData, onChangeForm, isNotEmpty } = useForm({
-    usuario: 'juan98',
+    carnetUsuario: '201800496',
     claveUsuario: '123456'
   });
 
-  const { usuario, claveUsuario } = formData;
+  const { carnetUsuario, claveUsuario } = formData;
 
 
   const submitLogin = (ev: any) => {
     ev.preventDefault();
 
     // backend...
-    login(usuario, claveUsuario);
+    login(carnetUsuario, claveUsuario);
     //console.log(ok)
     //return navigate('/home')
 
@@ -27,7 +27,7 @@ export const LoginPage = () => {
 
   const allOk = (): boolean => {
 
-    return (isNotEmpty(usuario) && isNotEmpty(claveUsuario)) ? true : false
+    return (isNotEmpty(carnetUsuario) && isNotEmpty(claveUsuario)) ? true : false
 
   }
 
@@ -37,12 +37,12 @@ export const LoginPage = () => {
       <h2>Login page</h2>
       <form onSubmit={submitLogin}>
         <div className="form-group">
-          <label className="form-label mt-1">Username</label>
+          <label className="form-label mt-1">Carnet</label>
           <input
             type="text"
             className="form-control"
-            name="usuario"
-            value={usuario}
+            name="carnetUsuario"
+            value={carnetUsuario}
             onChange={(ev) => onChangeForm(ev)}
           />
           {/* <div className="valid-feedback">Success! You've done it.</div> */}

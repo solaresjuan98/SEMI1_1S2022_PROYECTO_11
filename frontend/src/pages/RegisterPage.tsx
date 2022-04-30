@@ -4,6 +4,17 @@ import { AuthContext } from '../context/AuthContext';
 import { useForm } from '../hooks/useForm';
 
 
+const carreers =
+  [
+    'Ingenieria Civil',
+    'Ingenieria Química',
+    'Ingenieria Mecánica',
+    'Ingenieria Eléctrica',
+    'Ingenieria Eléctronica',
+    'Ingenieria Industrial',
+    'Ingenieria en Ciencias y Sistemas'
+  ]
+
 export const RegisterPage = () => {
 
   const { register } = useContext(AuthContext);
@@ -12,9 +23,11 @@ export const RegisterPage = () => {
     formData,
     onChangeForm,
     onChangeFile,
+    onChangeSelect,
     isNotEmpty } = useForm({
       nombreUsuario: '',
-      usuario: '',
+      carnetUsuario: '',
+      carreraUsuario: '',
       claveUsuario: '',
       confirmarclaveUsuario: '',
       file: ''
@@ -22,13 +35,14 @@ export const RegisterPage = () => {
 
   const {
     nombreUsuario,
-    usuario,
+    carnetUsuario,
+    carreraUsuario,
     claveUsuario,
     confirmarclaveUsuario, file } = formData;
 
   const allOk = (): boolean => {
 
-    return (isNotEmpty(nombreUsuario) && isNotEmpty(usuario) && isNotEmpty(claveUsuario) && isNotEmpty(confirmarclaveUsuario)) ? true : false;
+    return (isNotEmpty(nombreUsuario) && isNotEmpty(carnetUsuario) && isNotEmpty(claveUsuario) && isNotEmpty(confirmarclaveUsuario)) ? true : false;
 
   }
 
@@ -46,8 +60,11 @@ export const RegisterPage = () => {
   const onRegisterNewUser = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    console.log(formData);
-    await register(nombreUsuario, usuario, claveUsuario, file);
+    console.log(formData)
+
+
+
+    await register(nombreUsuario, carnetUsuario, carreraUsuario, claveUsuario, file);
 
   }
 
@@ -71,14 +88,35 @@ export const RegisterPage = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label mt-1">Username:</label>
+          <label className="form-label mt-1">Carnet:</label>
           <input
             type="text"
-            name='usuario'
-            value={usuario}
+            name='carnetUsuario'
+            value={carnetUsuario}
             onChange={onChangeForm}
             className="form-control" />
           {/* <div className="invalid-feedback">Error</div> */}
+        </div>
+
+        <div className="form-group">
+          <label className="form-label mt-1">Carreer:</label>
+          <select
+            multiple={false}
+            className="form-select"
+            //value={idAlbum}
+            name="carreraUsuario"
+            //onChange={(ev)=> {console.log(ev.target.children)}}
+            onChange={(ev) => onChangeSelect(ev, 'carreraUsuario')}
+          >
+            <option selected>Select an album </option>
+            {
+              carreers.map((career, i) => (
+                <option key={i} carreer-key={i}>{career}</option>
+              ))
+            }
+          </select>
+
+
         </div>
 
         <div className="form-group">

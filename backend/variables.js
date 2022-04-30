@@ -1,0 +1,1 @@
+PORT='5000' MYSQL_HOST='proyecto-semi.ci1iyrfyvoqp.us-east-1.rds.amazonaws.com' MYSQL_PASSWORD='adminadmin' AWS_BUCKET_NAME='semi1-practica1' AWS_BUCKET_REGION='us-east-1' AWS_ACCESS_KEY='AKIAUYF273HB7DCWIB4R' AWS_SECRET_ACCESS_KEY='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' BUCKET_PATH='https://semi1-practica1.s3.amazonaws.com/'
