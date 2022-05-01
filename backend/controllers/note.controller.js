@@ -36,10 +36,31 @@ const addNote = async (req, res = response) => {
 }
 
 
-// const getUserNotes = async (req, res = response) => {
+const getUserNotes = async (req, res = response) => {
 
-// }
+    const { idUser } = req.params;
+    try {
+        
+        let userNotes = await queries.getUserNotes(idUser);
+
+        res.status(200).json({
+            userNotes,
+            correcto: true,
+        });
+
+    } catch (error) {
+        console.log(error)
+
+        return res.status(400).json({
+            mensaje: 'Error en el servidor. Contacte con el administrador.',
+            correcto: false,
+        });
+    }
+
+}
+
+
 module.exports = {
     addNote,
-    //getUserNotes
+    getUserNotes
 }

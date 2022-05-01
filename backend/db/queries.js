@@ -1,3 +1,4 @@
+const { response } = require("express");
 const pool = require("./db");
 
 
@@ -111,6 +112,111 @@ const mergeUserNote = (userBody) => {
 }
 
 
+const getUserNotes = async (idUser) => {
+
+
+    return new Promise((resolve, reject) => {
+        let query = `select n.tituloNota, n.contenidoNota 
+        from Nota_Usuario nu join Usuario u on u.idUsuario = nu.idUsuario
+        join Nota n on n.idNota = nu.idNota
+        where u.idUsuario = ${idUser}`;
+
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            return resolve(res);
+        });
+    });
+
+}
+
+// const deleteNote = async (idUser) => {
+
+
+//     return new Promise((resolve, reject) => {
+//         let query = `delete from Nota where idNota = ${idUser}`;
+
+//         pool.query(query, (err, res) => {
+//             if (err) reject(err);
+//             return resolve(res);
+//         });
+//     });
+
+// }
+
+// const deleteNoteUser = async (idUser) => {
+
+
+//     return new Promise((resolve, reject) => {
+//         let query = `select n.tituloNota, n.contenidoNota 
+//         from Nota_Usuario nu join Usuario u on u.idUsuario = nu.idUsuario
+//         join Nota n on n.idNota = nu.idNota
+//         where u.idUsuario = ${idUser}`;
+
+//         pool.query(query, (err, res) => {
+//             if (err) reject(err);
+//             return resolve(res);
+//         });
+//     });
+
+// }
+
+
+// ? ========================= EVENTS ===============================
+
+
+const getUserEvents = async (idUser) => {
+
+
+    return new Promise((resolve, reject) => {
+        let query = `select e.nombreEvento, e.descripcionEvento, e.fechaInicio, e.fechaFinal 
+        from Evento_Usuario eu join Usuario u on u.idUsuario = eu.idUsuario
+        join Evento e on e.idEvento = eu.idEvento
+        where u.idUsuario = ${idUser}`;
+
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            return resolve(res);
+        });
+    });
+
+}
+
+
+const createEvent = async (eventBody) => {
+
+    const { nombreEvento, descripcionEvento, fechaInicio, fechaFinal } = eventBody;
+
+    return new Promise((resolve, reject) => {
+        let query = `insert into Evento(nombreEvento, descripcionEvento, fechaInicio, fechaFinal) 
+        values('${nombreEvento}', '${descripcionEvento}', '${fechaInicio}', '${fechaFinal}')`;
+
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            return resolve(res);
+        });
+    });
+
+
+}
+
+
+const mergeUserEvent = async (newBody) => {
+
+    let { idUsuario, idEvento } = newBody;
+    return new Promise((resolve, reject) => {
+        let query = `insert into Evento_Usuario(idUsuario, idEvento) 
+        values(${idUsuario}, ${idEvento})`
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            resolve(res);
+        });
+
+    })
+
+}
+
+
+
 let queries = {
     // * USERS
     findUser,
@@ -120,7 +226,12 @@ let queries = {
     getUsers,
     // * NOTES
     createNote,
-    mergeUserNote
+    mergeUserNote,
+    getUserNotes,
+    // * EVENTS
+    getUserEvents,
+    createEvent,
+    mergeUserEvent
 
 }
 

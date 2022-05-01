@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { useState } from 'react'
 import S3FileUpload from 'react-s3'
 import { S3config } from '../helpers/s3';
@@ -71,6 +72,14 @@ export const useForm = <T>(initialState: T) => {
 
     }
 
+    const onChangeDate = (ev: Date, field: string) => {
+
+        console.log(ev);
+        setFormData(prev => ({
+            ...prev,
+            [field]: ev,
+        }));
+    }
 
     const isNotEmpty = (field: string): boolean => {
 
@@ -83,6 +92,7 @@ export const useForm = <T>(initialState: T) => {
         onChangeFile,
         onChangeTextArea,
         onChangeSelect,
+        onChangeDate,
         formData
     }
 

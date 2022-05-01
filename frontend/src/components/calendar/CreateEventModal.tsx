@@ -4,11 +4,7 @@ import Modal from 'react-modal'
 import { useForm } from "../../hooks/useForm";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
-// import { AuthContext } from "../context/AuthContext";
-// import { useAlbums } from "../hooks/useAlbums";
-//import axios from "axios";
-// import { useForm } from '../hooks/useForm';
-// import { usePhotos } from '../hooks/usePhotos';
+
 
 
 
@@ -41,18 +37,25 @@ export const CreateEventModal = ({ maxHeight }: Props) => {
         },
     };
 
-    const { formData, onChangeForm, onChangeFile } = useForm({
-        nombreImagen: '',
-        file: '',
-        idAlbum: ''
+    const { formData, onChangeForm, onChangeDate, onChangeTextArea } = useForm({
+        nombreEvento: '',
+        descripcionEvento: '',
+        fechaInicio: moment(now).toDate(),
+        fechaFinal: moment(finalDate).toDate()
     });
 
-    const { nombreImagen, file, idAlbum } = formData;
+    const { nombreEvento, descripcionEvento } = formData;
 
     const [modalIsOpen, setModalIsOpen] = useState(true)
 
     const closeModal = () => {
         setModalIsOpen(false)
+    }
+
+    const submitEvent = (ev: any) => {
+        ev.preventDefault();
+        // ?April 30, 2022 10:00 PM
+        console.log(moment(formData.fechaInicio).format("LLL").toString())
     }
 
     return (
@@ -69,15 +72,15 @@ export const CreateEventModal = ({ maxHeight }: Props) => {
             <h3>Add new event</h3>
             <hr />
 
-            <form className="container">
+            <form className="container" onSubmit={submitEvent}>
                 <div className="form-group">
                     <label className="form-label mt-2">Name event</label>
                     <input
                         type="text"
-                        name='nombreImagen'
+                        name='nombreEvento'
                         autoComplete="off"
                         className="form-control"
-                        value={nombreImagen}
+                        value={nombreEvento}
                         onChange={onChangeForm}
                     // className={`form-control ${confirmPasswords() ? 'is-valid' : 'is-invalid'} `} 
                     />
@@ -86,9 +89,9 @@ export const CreateEventModal = ({ maxHeight }: Props) => {
                 <div className="form-group">
                     <label className="form-label mt-2">Fecha inicio</label>
                     <DateTimePicker
-                        //onChange={handleEndDateChange}
                         minDate={dateStart}
-                        value={dateEnd}
+                        value={formData.fechaInicio}
+                        onChange={(ev) => onChangeDate(ev, 'fechaInicio')}
                         className="form-control"
                     />
                 </div>
@@ -97,7 +100,8 @@ export const CreateEventModal = ({ maxHeight }: Props) => {
                     <DateTimePicker
                         //onChange={handleEndDateChange}
                         minDate={dateStart}
-                        value={dateEnd}
+                        value={formData.fechaFinal}
+                        onChange={(ev) => onChangeDate(ev, 'fechaFinal')}
                         className="form-control"
                     />
                 </div>
@@ -105,7 +109,11 @@ export const CreateEventModal = ({ maxHeight }: Props) => {
 
                 <div className="form-group">
                     <label className="form-label mt-4">Event description</label>
-                    <textarea className="form-control" id="exampleTextarea" rows={4}></textarea>
+                    <textarea className="form-control"
+                        name="descripcionEvento"
+                        value={descripcionEvento}
+                        onChange={onChangeTextArea}
+                        id="exampleTextarea" rows={4}></textarea>
                 </div>
 
                 <div className="form-group d-grid gap-2 mt-3">

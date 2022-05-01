@@ -6,6 +6,9 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "../App.css";
 import { CalendarEvent } from "../components/calendar/CalendarEvent";
 import { CreateEventModal } from "../components/calendar/CreateEventModal";
+import { useEvents } from "../hooks/useEvents";
+import { AuthContext } from '../context/AuthContext';
+import { Event } from "../helpers/interfaces";
 
 moment.locale("en");
 const localizer = momentLocalizer(moment);
@@ -16,31 +19,28 @@ let events_: any[] = [];
 
 export const CalendarPage = () => {
 
+    //* hook de eventos
+    const {events, loadingEvents } = useEvents();
+
     const [openModal, setOpenModal] = useState(false);
-    // Estado de eventos
-    const [eventos, setEventos] = useState([]);
+
+
 
     // * Estado de eventos filtrados, para mostrar en el calendario
-    const events = [
-        {
-            title: "My birthday",
-            start: moment().toDate(), // is valid new Date() too
-            end: moment().add(2, "hours").toDate(),
-            bgcolor: "#fafafa",
-            notes: "Buy a cake :v",
-            user: {
-                _id: "123",
-                name: "John",
-            },
-        },
-    ];
+    // let events: Event[] = [
+    //     {
+    //         title: "My birthday",
+    //         start: moment().toDate(), // is valid new Date() too
+    //         end: moment().add(2, "hours").toDate(),
+    //         bgcolor: "#fafafa",
+    //         notes: "Buy a cake :v",
+    //         user: {
+    //             _id: "123",
+    //             name: "John",
+    //         },
+    //     },
+    // ];
 
-    console.log(events);
-    useEffect(() => {
-
-    }, []);
-
-    events_ = [...eventos];
 
     // Formateando las fechas del calendario
     for (let i = 0; i < events_.length; i++) {
@@ -91,14 +91,8 @@ export const CalendarPage = () => {
     }
 
 
-    // * Filtrar eventos del estudiante --------
-    const filtrarEventos = (idTemp: string) => {
-        const evFiltrados = events_.filter(
-            (evento) => evento.Id_temporada === parseInt(idTemp)
-        );
 
 
-    };
 
     return (
         <div className="container float-container mt-5">
@@ -112,23 +106,29 @@ export const CalendarPage = () => {
                 <h5>{""}</h5>
             )}
             <div className="calendar-screen animate__animated animate__fadeInUp" style={{ margin: '10px' }}>
+                {
+                    loadingEvents ? (
+                        <h2>Loading...</h2>
+                    ) :
+                        (
+                            <Calendar
+                                localizer={localizer}
+                                events={events}
+                                startAccessor="start"
+                                endAccessor="end"
+                                //messages={messages}
+                                eventPropGetter={eventStyleGetter}
+                                onDoubleClickEvent={onDoubleClick}
+                                onView={onViewChange}
+                                //view={lastView}
+                                onSelectEvent={onSelectEvent}
+                                components={{
+                                    event: CalendarEvent,
+                                }}
+                            />
+                        )
+                }
 
-
-                <Calendar
-                    localizer={localizer}
-                    events={events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    //messages={messages}
-                    eventPropGetter={eventStyleGetter}
-                    onDoubleClickEvent={onDoubleClick}
-                    onView={onViewChange}
-                    //view={lastView}
-                    onSelectEvent={onSelectEvent}
-                    components={{
-                        event: CalendarEvent,
-                    }}
-                />
 
             </div>
 

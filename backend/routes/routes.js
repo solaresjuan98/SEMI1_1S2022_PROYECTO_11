@@ -1,5 +1,6 @@
-const { Router } = require('express');const multer  = require('multer');
-const { addNote } = require('../controllers/note.controller');
+const { Router } = require('express'); const multer = require('multer');
+const { getUserEvents, createEvent } = require('../controllers/event.controller');
+const { addNote, getUserNotes } = require('../controllers/note.controller');
 //const { uploadPhoto, getPhoto, createAlbum, getUserAlbums, getAlbumImages, uploadPhotoAlbum, deleteAlbum, editAlbum } = require('../controllers/photo.controller');
 const { signup, login, editUser, getUsers } = require('../controllers/users.controller');
 const upload = multer({ dest: 'uploads/' });
@@ -12,10 +13,11 @@ appRouter.post('/registrar_usuario', signup);
 
 // * NOTES
 appRouter.post('/agregar_nota', addNote)
-appRouter.get('/notes/:id', )
+appRouter.get('/notes/:idUser', getUserNotes)
 
 // * EVENTS
-
+appRouter.get('/events/:idUser', getUserEvents)
+appRouter.post('/agregar_eventos', createEvent)
 
 
 
