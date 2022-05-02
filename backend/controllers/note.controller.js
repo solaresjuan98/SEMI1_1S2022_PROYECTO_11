@@ -115,14 +115,14 @@ const translateDescription = async (req = Request, res = Response) => {
 
 // * Texto a voz de la nota
 
-const textToVoiceNote = async (req = Request, res = Response) => {
-    let { noteContent } = req.body;
+const textToVoice = async (req = Request, res = Response) => {
+    let { textContent } = req.body;
 
     try {
         const params = {
             LanguageCode: "es-ES",
             OutputS3BucketName: bucketName,
-            Text: noteContent,
+            Text: textContent,
             OutputFormat: "mp3",
             VoiceId: "Joanna"
         }
@@ -153,5 +153,5 @@ module.exports = {
     getUserNotes,
     deleteNote,
     translateDescription,
-    textToVoiceNote
+    textToVoice
 }

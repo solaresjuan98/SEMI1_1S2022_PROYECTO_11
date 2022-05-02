@@ -1,6 +1,6 @@
 const { Router } = require('express'); const multer = require('multer');
 const { getUserEvents, createEvent } = require('../controllers/event.controller');
-const { addNote, getUserNotes, deleteNote, translateDescription, textToVoiceNote } = require('../controllers/note.controller');
+const { addNote, getUserNotes, deleteNote, translateDescription, textToVoice } = require('../controllers/note.controller');
 const { getUserTodos, createTodo, deleteTodo, completeTodo } = require('../controllers/todos.controller');
 //const { uploadPhoto, getPhoto, createAlbum, getUserAlbums, getAlbumImages, uploadPhotoAlbum, deleteAlbum, editAlbum } = require('../controllers/photo.controller');
 const { signup, login, editUser, getUsers, getPhotoLabels } = require('../controllers/users.controller');
@@ -17,7 +17,7 @@ appRouter.post('/agregar_nota', addNote)
 appRouter.get('/notes/:idUser', getUserNotes)
 appRouter.delete('/borrar_nota/:idNota', deleteNote)
 appRouter.post('/translate/:language', translateDescription)
-appRouter.post('/notes/voice', textToVoiceNote)
+
 
 // * EVENTS
 appRouter.get('/events/:idUser', getUserEvents)
@@ -33,6 +33,10 @@ appRouter.delete('/borrar_todo/:idTodo', deleteTodo)
 
 // * REKOGNITION
 appRouter.post('/get_labels', getPhotoLabels);
+
+// * POLLY
+
+appRouter.post('/text_to_voice', textToVoice);
 
 // appRouter.post('/subir_foto', upload.single('photo'), uploadPhoto);
 // appRouter.post('/registrar_usuario', signup);
