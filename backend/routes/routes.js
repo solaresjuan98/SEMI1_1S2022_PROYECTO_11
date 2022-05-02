@@ -1,6 +1,6 @@
 const { Router } = require('express'); const multer = require('multer');
 const { getUserEvents, createEvent } = require('../controllers/event.controller');
-const { addNote, getUserNotes, deleteNote, translateDescription } = require('../controllers/note.controller');
+const { addNote, getUserNotes, deleteNote, translateDescription, textToVoiceNote } = require('../controllers/note.controller');
 const { getUserTodos, createTodo, deleteTodo, completeTodo } = require('../controllers/todos.controller');
 //const { uploadPhoto, getPhoto, createAlbum, getUserAlbums, getAlbumImages, uploadPhotoAlbum, deleteAlbum, editAlbum } = require('../controllers/photo.controller');
 const { signup, login, editUser, getUsers, getPhotoLabels } = require('../controllers/users.controller');
@@ -17,6 +17,7 @@ appRouter.post('/agregar_nota', addNote)
 appRouter.get('/notes/:idUser', getUserNotes)
 appRouter.delete('/borrar_nota/:idNota', deleteNote)
 appRouter.post('/translate/:language', translateDescription)
+appRouter.post('/notes/voice', textToVoiceNote)
 
 // * EVENTS
 appRouter.get('/events/:idUser', getUserEvents)

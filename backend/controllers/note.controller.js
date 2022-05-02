@@ -1,6 +1,8 @@
 const { response, json } = require("express")
 const { uploadFile, getFileStream, rekognition, translate } = require("../helpers/s3");
 const { queries } = require("../db/queries");
+const { run } = require("../helpers/polly");
+const bucketName = process.env.AWS_BUCKET_NAME;
 
 
 const addNote = async (req, res = response) => {
@@ -67,7 +69,7 @@ const deleteNote = async (req, res = response) => {
 
         await queries.deleteNoteUser(idNota);
         await queries.deleteNote(idNota);
-        
+
 
         res.status(200).json({
             mensaje: 'Eliminar nota',
@@ -111,11 +113,45 @@ const translateDescription = async (req = Request, res = Response) => {
     });
 }
 
+// * Texto a voz de la nota
+
+const textToVoiceNote = async (req = Request, res = Response) => {
+    let { noteContent } = req.body;
+
+    try {
+        const params = {
+            LanguageCode: "es-ES",
+            OutputS3BucketName: bucketName,
+            Text: noteContent,
+            OutputFormat: "mp3",
+            VoiceId: "Joanna"
+        }
+
+        let url = await run(params);
+
+        return res.status(200).json({
+            mensaje: 'Se ha convertido el texto en voz exitosamente.',
+            url,
+            correcto: true,
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            mensaje: 'Error en el servidor. Contacte con el administrador.',
+            correcto: false,
+        });
+    }
+
+}
+
 
 
 module.exports = {
     addNote,
     getUserNotes,
     deleteNote,
-    translateDescription
+    translateDescription,
+    textToVoiceNote
 }
