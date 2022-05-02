@@ -36,7 +36,7 @@ export const NotesList = () => {
     const [selectedNote, setSelectedNote] = useState<UserNote>();
 
     // * Notes hook
-    const { loadingUserNotes, userNotes } = useNotes();
+    const { loadingUserNotes, userNotes, deleteNote } = useNotes();
     //const [showSingleNote, setShowSingleNote] = useState(false);
 
 
@@ -50,6 +50,12 @@ export const NotesList = () => {
 
         //
 
+
+    }
+
+    const onDeleteNote = async (note: UserNote) => {
+
+        await deleteNote(note.idNota);
 
     }
 
@@ -78,7 +84,8 @@ export const NotesList = () => {
                                                 {/* <h6 className="card-subtitle mb-2 text-muted">{note.}</h6> */}
                                                 <p className="card-text">{note.contenidoNota}</p>
                                                 <button className='btn btn-outline-primary' onClick={() => onSelectNote(note)}>Go to note</button>
-                                                {/* <a href="#" className="card-link">Another link</a> */}
+                                                <button className='btn btn-outline-danger' style={{ margin: '5px' }} onClick={() => onDeleteNote(note)}>Delete note</button>
+
                                             </div>
                                         </div>
                                     ))

@@ -5,7 +5,7 @@ interface Props {
 }
 
 export const CalendarEvent = ({ event }: Props) => {
-  console.log(event);
+  ////console.log(event);
   const { title, user, end } = event;
   return (
     <div>

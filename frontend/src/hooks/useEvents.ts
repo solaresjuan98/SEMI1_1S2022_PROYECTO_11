@@ -21,36 +21,51 @@ export const useEvents = () => {
         await axios.get(`${process.env.REACT_APP_BACKEND}/events/${idUser}`)
             .then((response) => {
                 ////console.log(response.data.userNotes);
+
+                setEvents([]);
                 setUserEvents(response.data.userEvents)
-                setLoadingEvents(false);
+                let n = userEvents.length;
+                
 
-                if (response.data.correcto) {
-                    userEvents.map((event) => {
+                userEvents.map((event) => {
+                    console.log('user events length ->', n)
+                    console.log('events length ->', events.length)
+                    //setEvents([]);
+                    //console.log('event -> ', event)
+                    let newEvent = {
+                        title: '',
+                        start: moment().toDate(),
+                        end: moment().toDate(),
+                        bgcolor: "#fafafa",
+                        notes: '',
+                        // user: {
+                        //     _id: auth.uid,
+                        //     name: ''
+                        // }
+                    };
 
-                        let newEvent = {
-                            title: '',
-                            start: moment().toDate(),
-                            end: moment().toDate(),
-                            bgcolor: "#fafafa",
-                            notes: '',
-                            // user: {
-                            //     _id: auth.uid,
-                            //     name: ''
-                            // }
-                        };
+                    newEvent.title = event.nombreEvento;
+                    newEvent.start = moment(event.fechaInicio).toDate();
+                    newEvent.end = moment(event.fechaInicio).toDate();
+                    newEvent.notes = event.descripcionEvento
 
-                        newEvent.title = event.nombreEvento;
-                        newEvent.start = moment(event.fechaInicio).toDate();
-                        newEvent.end = moment(event.fechaInicio).toDate();
-                        newEvent.notes = event.descripcionEvento
+                    //console.log(newEvent);
 
-                        console.log(newEvent);
-
+                    if (events.length <= n) {
                         //! CORREGIR
-                        setEvents([...events, newEvent])
-                        console.log(events.length)
-                    })
-                }
+                        console.log('agregar')
+                        events.push(newEvent);
+                        //events.concat(newEvent)
+                        let newEvents = [...events, newEvent]
+                        setEvents(newEvents)
+                        //setEvents([...events, newEvent])
+                        //console.log(events)
+                    }
+
+
+                })
+                console.log(events)
+                setLoadingEvents(false);
 
 
             })
@@ -63,18 +78,18 @@ export const useEvents = () => {
 
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            getUserEvents();
-        }, 3500);
-
+        // const interval = setInterval(() => {
+        //     getUserEvents();
+        // }, 3500);
+        console.log(events)
         getUserEvents()
-        return () => clearInterval(interval);
-    }, [])
+        // return () => clearInterval(interval);
+    }, [loadingEvents])
 
 
     return {
         loadingEvents,
-        userEvents,
-        events
+        events,
+        getUserEvents
     }
 }

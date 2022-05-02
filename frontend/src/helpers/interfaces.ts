@@ -18,6 +18,7 @@ export interface NotesResponse {
 }
 
 export interface UserNote {
+    idNota: number;
     tituloNota: string;
     contenidoNota: string;
 }
@@ -34,4 +35,58 @@ export interface UserEvent {
     descripcionEvento: string;
     fechaInicio: string;
     fechaFinal: string;
+}
+
+// * Todos response
+
+export interface TodosResponse {
+    userTodos: UserTodo[];
+    correcto: boolean;
+}
+
+export interface UserTodo {
+    idTodo: number;
+    tituloTodo: string;
+    contenidoTodo: string;
+    completado: number;
+}
+
+// * Translation
+export interface TranslateResponse {
+    message: Message;
+}
+
+export interface Message {
+    TranslatedText: string;
+    SourceLanguageCode: string;
+    TargetLanguageCode: string;
+}
+
+// * Labels
+export interface Detection {
+    Labels?: Label[];
+    LabelModelVersion?: string;
+}
+
+export interface Label {
+    Name: string;
+    Confidence: number;
+    Instances: Instance[];
+    Parents: Parent[];
+}
+
+export interface Instance {
+    BoundingBox: BoundingBox;
+    Confidence: number;
+}
+
+export interface BoundingBox {
+    Width: number;
+    Height: number;
+    Left: number;
+    Top: number;
+}
+
+export interface Parent {
+    Name: string;
 }

@@ -1,5 +1,5 @@
 const { response, json } = require("express")
-const bcrypt = require('bcryptjs');
+const { rekognition } = require("../helpers/s3");
 const { queries } = require("../db/queries");
 
 
@@ -154,13 +154,39 @@ const editUser = async (req, res = response) => {
 }
 
 
+const getPhotoLabels = async (req = request, res = Response) => {
+
+    let { image } = req.body;
+
+    let params = {
+        Image: {
+            S3Object: {
+                Bucket: "semi1-practica1",
+                Name: image
+            }
+        }
+    };
 
 
+    await rekognition.detectLabels(params, function (err, data) {
+        if (err) {
+            return res.json({
+                message: 'Error',
+                error: err
+            })
+        } else {
+            return res.json({
+                detection: data
+            })
+        }
+    })
 
+}
 
 module.exports = {
     getUsers,
     login,
     signup,
-    editUser
+    editUser,
+    getPhotoLabels
 }

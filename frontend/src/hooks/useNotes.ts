@@ -10,7 +10,8 @@ export const useNotes = () => {
 
     const idUser = auth.uid;
     const [loadingUserNotes, setLoadingUserNotes] = useState(true);
-    const [userNotes, setUserNotes] = useState<UserNote[]>([])
+    const [userNotes, setUserNotes] = useState<UserNote[]>([]);
+    const [translation, setTranslation] = useState("")
 
     const getUserNotes = async () => {
 
@@ -41,7 +42,7 @@ export const useNotes = () => {
 
 
                 if (response.data.correcto) {
-                    console.log(response.data);
+                    //console.log(response.data);
                     Swal.fire('Success', 'Your user has been created succesfully', 'success')
                 } else {
                     Swal.fire('Error', "Your note couldn't be created ", 'error')
@@ -54,9 +55,51 @@ export const useNotes = () => {
     }
 
 
+    const deleteNote = async (idNota: number) => {
+
+
+        await axios.delete(`${process.env.REACT_APP_BACKEND}/borrar_nota/${idNota}`)
+            .then((response) => {
+                if (response.data.correcto) {
+                    console.log(response.data);
+                    Swal.fire('Success', 'Your note has been deleted', 'success')
+                } else {
+                    Swal.fire('Error', "Your note couldn't be deleted ", 'error')
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                Swal.fire('Error', "Your note couldn't be deleted ", 'error')
+            })
+    }
+
+
+    const getTranslation = async (description: string, language: string) => {
+
+        await axios.post(`${process.env.REACT_APP_BACKEND}/translate/${language}`, {
+            description
+        })
+            .then((response) => {
+                console.log(response.data)
+
+                setTranslation(response.data.message.TranslatedText)
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
+    }
+
+
     useEffect(() => {
 
+        const interval = setInterval(() => {
+            getUserNotes();
+        }, 3500);
+
         getUserNotes();
+        return () => clearInterval(interval);
+
 
     }, [])
 
@@ -65,6 +108,9 @@ export const useNotes = () => {
     return {
         userNotes,
         loadingUserNotes,
-        createNote
+        createNote,
+        deleteNote,
+        getTranslation,
+        translation
     }
 }

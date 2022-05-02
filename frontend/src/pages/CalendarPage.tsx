@@ -20,7 +20,7 @@ let events_: any[] = [];
 export const CalendarPage = () => {
 
     //* hook de eventos
-    const {events, loadingEvents } = useEvents();
+    const { events, loadingEvents, getUserEvents } = useEvents();
 
     const [openModal, setOpenModal] = useState(false);
 
@@ -91,11 +91,21 @@ export const CalendarPage = () => {
     }
 
 
+    useEffect(() => {
+
+
+        //console.log(events)
+        if(!loadingEvents) { 
+            console.log(events)
+        }
+        
+
+    }, [loadingEvents])
 
 
 
     return (
-        <div className="container float-container mt-5">
+        <div className="container-fluid float-container mt-5">
 
             <h1>Calendar</h1>
             <hr />
@@ -107,7 +117,7 @@ export const CalendarPage = () => {
             )}
             <div className="calendar-screen animate__animated animate__fadeInUp" style={{ margin: '10px' }}>
                 {
-                    loadingEvents ? (
+                    events.length === 0 ? (
                         <h2>Loading...</h2>
                     ) :
                         (

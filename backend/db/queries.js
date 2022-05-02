@@ -116,7 +116,7 @@ const getUserNotes = async (idUser) => {
 
 
     return new Promise((resolve, reject) => {
-        let query = `select n.tituloNota, n.contenidoNota 
+        let query = `select n.idNota, n.tituloNota, n.contenidoNota 
         from Nota_Usuario nu join Usuario u on u.idUsuario = nu.idUsuario
         join Nota n on n.idNota = nu.idNota
         where u.idUsuario = ${idUser}`;
@@ -129,36 +129,33 @@ const getUserNotes = async (idUser) => {
 
 }
 
-// const deleteNote = async (idUser) => {
+const deleteNote = async (idNota) => {
 
 
-//     return new Promise((resolve, reject) => {
-//         let query = `delete from Nota where idNota = ${idUser}`;
+    return new Promise((resolve, reject) => {
+        let query = `delete from Nota where idNota = ${idNota}`;
 
-//         pool.query(query, (err, res) => {
-//             if (err) reject(err);
-//             return resolve(res);
-//         });
-//     });
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            return resolve(res);
+        });
+    });
 
-// }
+}
 
-// const deleteNoteUser = async (idUser) => {
+const deleteNoteUser = async (idNota) => {
 
 
-//     return new Promise((resolve, reject) => {
-//         let query = `select n.tituloNota, n.contenidoNota 
-//         from Nota_Usuario nu join Usuario u on u.idUsuario = nu.idUsuario
-//         join Nota n on n.idNota = nu.idNota
-//         where u.idUsuario = ${idUser}`;
+    return new Promise((resolve, reject) => {
+        let query = `delete from Nota_Usuario where idNota = ${idNota}`;
 
-//         pool.query(query, (err, res) => {
-//             if (err) reject(err);
-//             return resolve(res);
-//         });
-//     });
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            return resolve(res);
+        });
+    });
 
-// }
+}
 
 
 // ? ========================= EVENTS ===============================
@@ -215,6 +212,106 @@ const mergeUserEvent = async (newBody) => {
 
 }
 
+// ? ========================= TODOS ===============================
+
+const getUserTodos = async (idUser) => {
+
+    return new Promise((resolve, reject) => {
+
+        let query = `select t.idTodo, t.tituloTodo, t.contenidoTodo, t.completado
+        from Todo_Usuario tu join Usuario u on u.idUsuario = tu.idUsuario
+        join Todo t on t.idTodo= tu.idTodo
+        where u.idUsuario = ${idUser}`;
+
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            return resolve(res);
+        });
+    });
+
+}
+
+
+const createTodo = async (eventBody) => {
+
+    const { tituloTodo, contenidoTodo, completado } = eventBody;
+
+    return new Promise((resolve, reject) => {
+        let query = `insert into Todo(tituloTodo, contenidoTodo, completado)
+        values('${tituloTodo}', '${contenidoTodo}', 0);`;
+
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            return resolve(res);
+        });
+    });
+
+
+}
+
+const mergeUserTodo = async (newBody) => {
+
+    let { idUsuario, idTodo } = newBody;
+    return new Promise((resolve, reject) => {
+        let query = `insert into Todo_Usuario(idUsuario, idTodo) 
+        values(${idUsuario}, ${idTodo})`
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            resolve(res);
+        });
+
+    })
+
+}
+
+
+const completeTodo = async (idTodo) => {
+
+    return new Promise((resolve, reject) => {
+        let query = `update Todo set completado = true where idTodo = ${idTodo}`;
+
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            return resolve(res);
+        });
+    });
+
+
+}
+
+
+
+const deleteTodo = async (idTodo) => {
+
+
+    return new Promise((resolve, reject) => {
+        let query = `delete
+        from Todo_Usuario
+        where idTodo = ${idTodo}`;
+
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            return resolve(res);
+        });
+    });
+
+
+}
+
+const deleteMergeUserTodo = async (idTodo) => {
+    return new Promise((resolve, reject) => {
+
+        let query = `delete
+            from Todo
+            where idTodo = ${idTodo}`;
+
+        pool.query(query, (err, res) => {
+            if (err) reject(err);
+            return resolve(res);
+        });
+    });
+
+}
 
 
 let queries = {
@@ -228,10 +325,19 @@ let queries = {
     createNote,
     mergeUserNote,
     getUserNotes,
+    deleteNote,
+    deleteNoteUser,
     // * EVENTS
     getUserEvents,
     createEvent,
-    mergeUserEvent
+    mergeUserEvent,
+    // * TODOS
+    getUserTodos,
+    createTodo,
+    mergeUserTodo,
+    deleteTodo,
+    deleteMergeUserTodo,
+    completeTodo
 
 }
 

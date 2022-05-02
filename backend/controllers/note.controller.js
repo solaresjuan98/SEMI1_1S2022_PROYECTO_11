@@ -1,5 +1,5 @@
 const { response, json } = require("express")
-const bcrypt = require('bcryptjs');
+const { uploadFile, getFileStream, rekognition, translate } = require("../helpers/s3");
 const { queries } = require("../db/queries");
 
 
@@ -40,7 +40,7 @@ const getUserNotes = async (req, res = response) => {
 
     const { idUser } = req.params;
     try {
-        
+
         let userNotes = await queries.getUserNotes(idUser);
 
         res.status(200).json({
@@ -59,8 +59,63 @@ const getUserNotes = async (req, res = response) => {
 
 }
 
+const deleteNote = async (req, res = response) => {
+
+    const { idNota } = req.params;
+
+    try {
+
+        await queries.deleteNoteUser(idNota);
+        await queries.deleteNote(idNota);
+        
+
+        res.status(200).json({
+            mensaje: 'Eliminar nota',
+            correcto: true,
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            mensaje: 'Error en el servidor. Contacte con el administrador.',
+            correcto: false,
+        });
+    }
+
+}
+
+
+// * Translate note description
+const translateDescription = async (req = Request, res = Response) => {
+
+    let p = req.params;
+    //console.log(p.language)
+
+    let body = req.body
+
+    let description = body.description
+    // German -> de, French -> fr, English -> en
+    let params = {
+        SourceLanguageCode: 'auto',
+        TargetLanguageCode: p.language,
+        Text: description || 'Hello there'
+    };
+    translate.translateText(params, function (err, data) {
+        if (err) {
+            //console.log(err, err.stack);
+            res.send({ error: err })
+        } else {
+            console.log(data);
+            res.send({ message: data })
+        }
+    });
+}
+
+
 
 module.exports = {
     addNote,
-    getUserNotes
+    getUserNotes,
+    deleteNote,
+    translateDescription
 }

@@ -1,10 +1,11 @@
 require('dotenv').config();
+const AWS = require('aws-sdk')
 const S3 = require('aws-sdk/clients/s3');
 const fs = require('fs');
-const bucketName=process.env.AWS_BUCKET_NAME;
-const region=process.env.AWS_BUCKET_REGION;
-const accessKeyId=process.env.AWS_ACCESS_KEY;
-const secretAccessKey=process.env.AWS_SECRET_ACCESS_KEY;
+const bucketName = process.env.AWS_BUCKET_NAME;
+const region = process.env.AWS_BUCKET_REGION;
+const accessKeyId = process.env.AWS_ACCESS_KEY;
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
 
 const s3 = new S3({
     region,
@@ -12,8 +13,11 @@ const s3 = new S3({
     secretAccessKey,
 });
 
+// rekognition
+const rekognition = new AWS.Rekognition({ accessKeyId, region, secretAccessKey });
+const translate = new AWS.Translate({ accessKeyId, region, secretAccessKey });
 
-const uploadFile = ( file ) => {
+const uploadFile = (file) => {
     console.log(bucketName);
     const fileStream = fs.createReadStream(file.path);
     const uploadParams = {
@@ -26,7 +30,7 @@ const uploadFile = ( file ) => {
 
 
 // Download file from s3
-const getFileStream = ( fileKey ) => {
+const getFileStream = (fileKey) => {
     const downloadParams = {
         Key: fileKey,
         Bucket: bucketName,
@@ -37,4 +41,6 @@ const getFileStream = ( fileKey ) => {
 module.exports = {
     uploadFile,
     getFileStream,
+    rekognition,
+    translate
 }

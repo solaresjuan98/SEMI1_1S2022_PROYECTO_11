@@ -13,7 +13,7 @@ export const WriteNote = () => {
 
     const [uploadImage, setUploadImage] = useState(false);
 
-    const { formData, onChangeForm, onChangeTextArea } = useForm({
+    const { formData, onChangeForm, onChangeTextArea, isNotEmpty } = useForm({
         contenidoNota: "",
         fechaNota: date,
         tituloNota: ""
@@ -30,6 +30,13 @@ export const WriteNote = () => {
         await createNote(formData.contenidoNota, formData.fechaNota, formData.tituloNota)
     }
 
+
+    const allOk = (): boolean => {
+
+        return (isNotEmpty(formData.tituloNota) && isNotEmpty(formData.contenidoNota)) ? true : false
+
+    }
+
     return (
         <>
             <h4>Write Note</h4>
@@ -42,6 +49,16 @@ export const WriteNote = () => {
             {
                 uploadImage ? (
                     <>
+                        <div className="form-label mt-4">
+                            Note title
+                        </div>
+                        <input
+                            type="text"
+                            className="form-control"
+                            name="tituloNota"
+                            value={formData.tituloNota}
+                            onChange={(ev) => onChangeForm(ev)}
+                        />
                         <div className="form-group">
                             <label className="form-label mt-4">Convert an image into text</label>
                             <input
@@ -87,7 +104,9 @@ export const WriteNote = () => {
                                 >
                                 </textarea>
                                 <div className="clearfix">
-                                    <button className='btn btn-outline-primary mt-2 float-right' onClick={onCreateNote}>
+                                    <button className='btn btn-outline-primary mt-2 float-right'
+                                        disabled={!allOk()}
+                                        onClick={onCreateNote}>
                                         Save note
                                     </button>
                                 </div>
@@ -102,3 +121,7 @@ export const WriteNote = () => {
         </>
     )
 }
+function isNotEmpty(carnetUsuario: any) {
+    throw new Error('Function not implemented.');
+}
+

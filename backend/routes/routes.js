@@ -1,8 +1,9 @@
 const { Router } = require('express'); const multer = require('multer');
 const { getUserEvents, createEvent } = require('../controllers/event.controller');
-const { addNote, getUserNotes } = require('../controllers/note.controller');
+const { addNote, getUserNotes, deleteNote, translateDescription } = require('../controllers/note.controller');
+const { getUserTodos, createTodo, deleteTodo, completeTodo } = require('../controllers/todos.controller');
 //const { uploadPhoto, getPhoto, createAlbum, getUserAlbums, getAlbumImages, uploadPhotoAlbum, deleteAlbum, editAlbum } = require('../controllers/photo.controller');
-const { signup, login, editUser, getUsers } = require('../controllers/users.controller');
+const { signup, login, editUser, getUsers, getPhotoLabels } = require('../controllers/users.controller');
 const upload = multer({ dest: 'uploads/' });
 const appRouter = Router();
 
@@ -14,12 +15,23 @@ appRouter.post('/registrar_usuario', signup);
 // * NOTES
 appRouter.post('/agregar_nota', addNote)
 appRouter.get('/notes/:idUser', getUserNotes)
+appRouter.delete('/borrar_nota/:idNota', deleteNote)
+appRouter.post('/translate/:language', translateDescription)
 
 // * EVENTS
 appRouter.get('/events/:idUser', getUserEvents)
 appRouter.post('/agregar_eventos', createEvent)
 
 
+// * TODOS
+appRouter.get('/todos/:idUser', getUserTodos)
+appRouter.post('/agregar_todo', createTodo)
+appRouter.post('/complete_todo/:idTodo', completeTodo)
+appRouter.delete('/borrar_todo/:idTodo', deleteTodo)
+
+
+// * REKOGNITION
+appRouter.post('/get_labels', getPhotoLabels);
 
 // appRouter.post('/subir_foto', upload.single('photo'), uploadPhoto);
 // appRouter.post('/registrar_usuario', signup);
