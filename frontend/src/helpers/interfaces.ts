@@ -90,3 +90,11 @@ export interface BoundingBox {
 export interface Parent {
     Name: string;
 }
+
+// * Audio
+
+export interface AudioResponse {
+    mensaje: string;
+    url: string;
+    correcto: boolean;
+}

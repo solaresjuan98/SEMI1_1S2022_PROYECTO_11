@@ -9,9 +9,14 @@ export const useNotes = () => {
     const { auth } = useContext(AuthContext);
 
     const idUser = auth.uid;
+
+    // * Loading states
     const [loadingUserNotes, setLoadingUserNotes] = useState(true);
+    const [loadingAudio, setLoadingAudio] = useState(true);
+
     const [userNotes, setUserNotes] = useState<UserNote[]>([]);
     const [translation, setTranslation] = useState("")
+    const [audioLink, setAudioLink] = useState("");
 
     const getUserNotes = async () => {
 
@@ -90,6 +95,31 @@ export const useNotes = () => {
 
     }
 
+    const getAudioNote = async (textContent: string) => {
+
+
+        await axios.post(`${process.env.REACT_APP_BACKEND}/text_to_voice`, {
+            textContent
+        })
+            .then((response) => {
+                console.log(response.data);
+
+                if (response.data.correcto) {
+
+                    setAudioLink(response.data.url);
+                    setLoadingAudio(false);
+                } else {
+
+                }
+
+            })
+            .catch((error) => {
+
+                console.log(error);
+            })
+
+    }
+
 
     useEffect(() => {
 
@@ -108,9 +138,12 @@ export const useNotes = () => {
     return {
         userNotes,
         loadingUserNotes,
+        loadingAudio,
+        translation,
+        audioLink,
         createNote,
         deleteNote,
         getTranslation,
-        translation
+        getAudioNote
     }
 }

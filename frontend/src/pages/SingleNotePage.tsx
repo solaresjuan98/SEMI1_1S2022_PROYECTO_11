@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { UserNote } from '../helpers/interfaces';
 import { useNotes } from '../hooks/useNotes';
 import { Note } from '../interfaces/interfaces';
+import { NavLink } from 'react-router-dom';
 
 interface Props {
     onSelectNote: (note: UserNote) => void;
@@ -12,12 +13,34 @@ interface Props {
 
 export const SingleNotePage = ({ onSelectNote, note }: Props) => {
 
-    const { translation, getTranslation } = useNotes()
+    const { loadingAudio, audioLink, translation, getTranslation, getAudioNote } = useNotes();
+
+    const [showAudio, setShowAudio] = useState(false);
 
     const onTranslateNote = async (description: string, language: 'en' | 'es' | 'fr' | 'de') => {
 
         await getTranslation(description, language);
+        //await getAudioNote(description);
+
     }
+
+    const onGetTextAudio = async (description: string) => {
+
+
+        await getAudioNote(description);
+
+
+        if (!loadingAudio) {
+            setTimeout(() => {
+                console.log('Listo');
+                setShowAudio(true);
+            }, 10000)
+
+        }
+
+
+    }
+
 
     return (
         <>
@@ -46,6 +69,12 @@ export const SingleNotePage = ({ onSelectNote, note }: Props) => {
                 FR
             </button>
 
+            <button className='btn btn-outline-dark'
+                onClick={() => onGetTextAudio(note.contenidoNota)}
+                style={{ margin: '5px' }}>
+                Get Audio
+            </button>
+
             <div className="card mt-4" style={{ width: '100%' }}>
                 <div className="card-body">
                     <p className='text-dark'>{note.contenidoNota}</p>
@@ -59,6 +88,47 @@ export const SingleNotePage = ({ onSelectNote, note }: Props) => {
 
 
             <button className='btn btn-warning mt-4' onClick={() => onSelectNote(null!)}>Go back</button>
+
+            {
+
+                (!loadingAudio && showAudio) &&
+                (
+
+                    <>
+                        <div className="card mt-2">
+                            <div className="card-body">
+                                <audio controls preload="auto" id="audio_player">
+                                    <source src={audioLink} type="audio/mpeg" />
+
+                                </audio>
+                            </div>
+                        </div>
+                        <a href={audioLink}>Audiolink</a> <br />
+                        {/* <small>{audioLink}</small> */}
+
+                    </>
+
+                )
+
+                // (showAudio) && (
+
+                //     <>
+                //         <div className="card mt-2">
+                //             <div className="card-body">
+                //                 <audio controls preload="auto" id="audio_player">
+                //                     <source src={audioLink} type="audio/mpeg" />
+
+                //                 </audio>
+                //             </div>
+                //         </div>
+                //         <a href={audioLink}>Audiolink</a> <br />
+                //         <small>{audioLink}</small>
+
+                //     </>
+
+                // )
+            }
+
         </>
     )
 }
