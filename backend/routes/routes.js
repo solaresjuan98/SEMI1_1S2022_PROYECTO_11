@@ -1,6 +1,7 @@
 const { Router } = require('express'); const multer = require('multer');
 const { getUserEvents, createEvent } = require('../controllers/event.controller');
 const { addNote, getUserNotes, deleteNote, translateDescription, textToVoice } = require('../controllers/note.controller');
+const { extractImageText } = require('../controllers/photo.controller');
 const { getUserTodos, createTodo, deleteTodo, completeTodo } = require('../controllers/todos.controller');
 //const { uploadPhoto, getPhoto, createAlbum, getUserAlbums, getAlbumImages, uploadPhotoAlbum, deleteAlbum, editAlbum } = require('../controllers/photo.controller');
 const { signup, login, editUser, getUsers, getPhotoLabels } = require('../controllers/users.controller');
@@ -33,6 +34,7 @@ appRouter.delete('/borrar_todo/:idTodo', deleteTodo)
 
 // * REKOGNITION
 appRouter.post('/get_labels', getPhotoLabels);
+appRouter.post('/get_photo_text', extractImageText);
 
 // * POLLY
 

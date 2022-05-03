@@ -1,6 +1,7 @@
 const { response } = require("express");
 const { uploadFile, getFileStream } = require("../helpers/s3");
 const { queries } = require("../db/queries");
+const { client } = require("../helpers/rekognition");
 
 
 
@@ -181,6 +182,55 @@ const editAlbum = async ( req, res = response ) => {
 
 }
 
+// Extracción de texto en foto
+
+const extractImageText = async (req = Request, res = Response) => {
+    let { photo } = req.body;
+    console.log(photo)
+    try {
+
+        const params = {
+            Image: {
+                S3Object: {
+                    Bucket: 'semi1-practica1',
+                    Name: photo
+                },
+            },
+        }
+
+        let labels = [];
+        client.detectText(params, function(err, response) {
+            if (err) {
+              console.log(err, err.stack); // handle error if an error occurred
+            } else {
+            let salida = '';
+            response.TextDetections.forEach(label => {
+                    let labelItem = {
+                        text: label.DetectedText,
+                        type: label.Type,
+                    }
+                    salida += labelItem.text + " ";
+                    labels.push(labelItem)
+                    console.log(`Detected Text: ${label.DetectedText}`),
+                    console.log(`Type: ${label.Type}`)
+                    }
+                );
+
+                res.status(200).json({
+                mensaje: 'Imagen analizada exitosamente.',
+                salida
+                });
+            }
+          });
+
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+            mensaje: 'Hubo un error al intentar reconocer el texto de la imagen. Contacte al administrador.',
+            correcto: false
+        });
+    }
+}
 
 module.exports = {
     uploadPhoto,
@@ -190,5 +240,6 @@ module.exports = {
     getAlbumImages,
     uploadPhotoAlbum,
     deleteAlbum,
-    editAlbum
+    editAlbum,
+    extractImageText
 }
