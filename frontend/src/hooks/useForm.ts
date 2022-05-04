@@ -2,6 +2,7 @@ import moment from 'moment';
 import React, { useState } from 'react'
 import S3FileUpload from 'react-s3'
 import { S3config } from '../helpers/s3';
+window.Buffer = window.Buffer || require("buffer").Buffer;
 
 
 var imgName = '';
@@ -54,7 +55,7 @@ export const useForm = <T>(initialState: T) => {
         imgName = img.name
         const file = new FormData();
         file.append("file", img);
-
+        console.log(img);
         console.log(S3config)
         S3FileUpload.uploadFile(img, S3config)
             .then((data: { location: any; }) => {

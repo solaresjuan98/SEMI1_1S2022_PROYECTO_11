@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useAnalysis } from '../hooks/useAnalysis';
 import { useForm } from '../hooks/useForm';
 import { useNotes } from '../hooks/useNotes';
 
@@ -11,13 +12,21 @@ export const WriteNote = () => {
     // * image hook
     const { createNote } = useNotes();
 
+    // * analysis hook
+    const { getTextFromImage, textImage } = useAnalysis();
+
     const [uploadImage, setUploadImage] = useState(false);
 
-    const { formData, onChangeForm, onChangeTextArea, isNotEmpty } = useForm({
-        contenidoNota: "",
-        fechaNota: date,
-        tituloNota: ""
-    });
+    const { formData,
+        onChangeForm,
+        onChangeTextArea,
+        isNotEmpty,
+        onChangeFile } = useForm({
+            contenidoNota: "",
+            fechaNota: date,
+            tituloNota: "",
+            file: ""
+        });
 
     const onToggleSwitch = () => {
 
@@ -30,6 +39,17 @@ export const WriteNote = () => {
         await createNote(formData.contenidoNota, formData.fechaNota, formData.tituloNota)
     }
 
+    // * Send text image
+    const onCreateNoteImage = async () => {
+
+        let contenidoNota = textImage;
+        await createNote(contenidoNota, formData.fechaNota, formData.tituloNota)
+    }
+
+    const onConvertImage = async () => {
+
+        await getTextFromImage(formData.file);
+    }
 
     const allOk = (): boolean => {
 
@@ -65,14 +85,22 @@ export const WriteNote = () => {
                                 className="form-control"
                                 type="file"
                                 name="file"
-                            //onChange={onChangeFile}
+                                onChange={onChangeFile}
                             />
                         </div>
 
                         <div className="text-dark mt-5">
-                            Text
+                            {textImage}
                         </div>
-                        <button className='btn btn-outline-primary mt-2 float-right'>
+
+                        <button className='btn btn-outline-secondary mt-2 float-right'
+                            onClick={onConvertImage}>
+                            Get text
+                        </button>
+
+                        <button className='btn btn-outline-primary mt-2 float-right'
+                            //disabled={!allOk()}
+                            onClick={onCreateNoteImage}>
                             Save note
                         </button>
 

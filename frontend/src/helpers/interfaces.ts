@@ -98,3 +98,10 @@ export interface AudioResponse {
     url: string;
     correcto: boolean;
 }
+
+// * Extract text from image
+
+export interface TextDectection {
+    mensaje: string;
+    salida: string;
+}

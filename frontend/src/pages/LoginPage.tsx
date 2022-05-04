@@ -8,8 +8,8 @@ export const LoginPage = () => {
   const { login } = useContext(AuthContext);
 
   const { formData, onChangeForm, isNotEmpty } = useForm({
-    carnetUsuario: '201800496',
-    claveUsuario: '123456'
+    carnetUsuario: '',
+    claveUsuario: ''
   });
 
   const { carnetUsuario, claveUsuario } = formData;

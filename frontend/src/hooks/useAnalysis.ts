@@ -12,7 +12,11 @@ export const useAnalysis = () => {
 
     const [loading, setLoading] = useState(true);
     const [labelsResponse, setLabelsResponse] = useState<Detection>({})
-    const [albumLabelsResp, setAlbumLabelsResp] = useState<Detection>({})
+    const [albumLabelsResp, setAlbumLabelsResp] = useState<Detection>({});
+
+    // * Text from image
+    const [textImage, setTextImage] = useState("");
+    const [loadingTextImage, setLoadingTextImage] = useState(true);
 
     const getPhotoLabels = async () => {
 
@@ -34,6 +38,25 @@ export const useAnalysis = () => {
     }
 
 
+    const getTextFromImage = async (photoUrl: string) => {
+
+        let partir = photoUrl.split('/')
+        let image = partir[3];
+
+        await axios.post(`${process.env.REACT_APP_BACKEND}/get_photo_text`, {
+            photo: image
+        }).then((response) => {
+
+            setTextImage(response.data.salida);
+            setLoadingTextImage(false);
+
+        }).catch((err) => {
+            console.log(err);
+            setLoadingTextImage(true);
+        })
+
+    }
+
 
     useEffect(() => {
         getPhotoLabels();
@@ -42,6 +65,8 @@ export const useAnalysis = () => {
 
 
     return {
+        getTextFromImage,
+        textImage,
         labelsResponse,
         albumLabelsResp,
         loading

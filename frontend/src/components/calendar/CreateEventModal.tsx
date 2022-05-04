@@ -4,6 +4,7 @@ import Modal from 'react-modal'
 import { useForm } from "../../hooks/useForm";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
+import { useEvents } from "../../hooks/useEvents";
 
 
 
@@ -44,6 +45,10 @@ export const CreateEventModal = ({ maxHeight }: Props) => {
         fechaFinal: moment(finalDate).toDate()
     });
 
+
+    // * events hook
+    const { createEvent } = useEvents();
+
     const { nombreEvento, descripcionEvento } = formData;
 
     const [modalIsOpen, setModalIsOpen] = useState(true)
@@ -52,10 +57,13 @@ export const CreateEventModal = ({ maxHeight }: Props) => {
         setModalIsOpen(false)
     }
 
-    const submitEvent = (ev: any) => {
+    const submitEvent = async (ev: any) => {
         ev.preventDefault();
         // ?April 30, 2022 10:00 PM
         console.log(moment(formData.fechaInicio).format("LLL").toString())
+        await createEvent(formData.nombreEvento, formData.descripcionEvento,
+            moment(formData.fechaInicio).format("LLL").toString(),
+            moment(formData.fechaFinal).format("LLL").toString());
     }
 
     return (

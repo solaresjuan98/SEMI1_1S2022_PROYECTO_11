@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { Event } from '../helpers/interfaces'
 import { UserEvent } from '../helpers/interfaces';
 import moment from 'moment';
+import Swal from 'sweetalert2';
 
 
 export const useEvents = () => {
@@ -25,7 +26,7 @@ export const useEvents = () => {
                 setEvents([]);
                 setUserEvents(response.data.userEvents)
                 let n = userEvents.length;
-                
+
 
                 userEvents.map((event) => {
                     console.log('user events length ->', n)
@@ -76,12 +77,44 @@ export const useEvents = () => {
 
     }
 
+    const createEvent = async (
+        nombreEvento: string,
+        descripcionEvento: string,
+        fechaInicio: string,
+        fechaFinal: string) => {
+
+        let idUsuario = auth.uid;
+
+        await axios.post(`${process.env.REACT_APP_BACKEND}/agregar_eventos`, {
+            idUsuario,
+            nombreEvento,
+            descripcionEvento,
+            fechaInicio,
+            fechaFinal
+        })
+            .then((response) => {
+
+                if (response.data.correcto) {
+                    Swal.fire('Success', 'Event created', 'success')
+                }
+                else {
+                    Swal.fire('Error', 'Event not created', 'error')
+                }
+
+            })
+            .catch((error) => {
+
+                Swal.fire('Error', 'Event not created', 'error')
+            })
+
+    }
+
 
     useEffect(() => {
         // const interval = setInterval(() => {
         //     getUserEvents();
         // }, 3500);
-        console.log(events)
+        //console.log(events)
         getUserEvents()
         // return () => clearInterval(interval);
     }, [loadingEvents])
@@ -90,6 +123,7 @@ export const useEvents = () => {
     return {
         loadingEvents,
         events,
+        createEvent,
         getUserEvents
     }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/es";
@@ -7,8 +7,6 @@ import "../App.css";
 import { CalendarEvent } from "../components/calendar/CalendarEvent";
 import { CreateEventModal } from "../components/calendar/CreateEventModal";
 import { useEvents } from "../hooks/useEvents";
-import { AuthContext } from '../context/AuthContext';
-import { Event } from "../helpers/interfaces";
 
 moment.locale("en");
 const localizer = momentLocalizer(moment);

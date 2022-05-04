@@ -77,8 +77,9 @@ export const NotesList = () => {
                                     <h4>Loading....</h4>
                                 ) : (
 
+                             
                                     userNotes.map((note, i) => (
-                                        <div className="card mt-3" style={{ width: '100%' }} key={i}>
+                                        <div className="card mt-3 animate__animated animate__fadeInDown" style={{ width: '100%' }} key={i}>
                                             <div className="card-body">
                                                 <h4 className="card-title">{note.tituloNota}</h4>
                                                 {/* <h6 className="card-subtitle mb-2 text-muted">{note.}</h6> */}
