@@ -4,6 +4,7 @@ import { HomePage } from "../pages/HomePage";
 import { NotesPage } from "../pages/NotesPage";
 import { CalendarPage } from '../pages/CalendarPage';
 import { TodoListPage } from "../pages/TodoListPage";
+import { TopicsPage } from "../pages/TopicsPage";
 
 type JSXComponent = () => JSX.Element
 
@@ -37,4 +38,10 @@ export const routes: Route[] = [
         path: '/calendar',
         component: CalendarPage
     },
+    {
+        name: 'Topics',
+        path: '/topics',
+        component: TopicsPage
+    }
+    
 ]

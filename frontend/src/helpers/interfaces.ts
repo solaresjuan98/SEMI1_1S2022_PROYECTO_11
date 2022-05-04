@@ -105,3 +105,7 @@ export interface TextDectection {
     mensaje: string;
     salida: string;
 }
+
+export interface Topic {
+    TopicArn: string;
+}
