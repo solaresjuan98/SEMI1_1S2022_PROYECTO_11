@@ -91,7 +91,7 @@ export const SingleNotePage = ({ onSelectNote, note }: Props) => {
 
             {
 
-                (!loadingAudio && showAudio) &&
+                (!loadingAudio) &&
                 (
 
                     <>
