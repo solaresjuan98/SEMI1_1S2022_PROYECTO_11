@@ -23,8 +23,17 @@
 
 ### *Objetivos del proyecto* <a name="Objetivos"></a>
 ---
+* Aumentar la productividad de los estudiantes 
+* Ser una comunidad activa entre los estudiantes
+* Gestionar las actividades del semestre a traves de las distintas herramientas que brinda la aplicacion
+* Tener comunicacion con usuarios interesados en un tema en especifico
 ### *Descripción del proyecto* <a name="Descripcion"></a>
 ---
+USAC productivity App es una aplicación que ayuda a elevar la productividad de los estudiantes universitarios
+La aplicación es conocida por contar con una comunidad activa de estudiantes que se ayudan
+en alcanzar sus metas de estudios y compartir nuevas ideas. En esta aplicación se puede escribir notas y se pueden traducir hasta 3 idiomas diferentes y descargarlas en un archivo de texto.  Agregar eventos a un calendario para que el usuario pueda administrar su tiempo de la mejor forma.
+Se permite accede a la aplicación con usuario y contraseña. Se pueden realizar grupos de estudio para poder cooperar en equipo. La aplicación contará con un bot de ayuda para los usuarios.
+
 ### *Arquitectura* <a name="Arquitectura"></a>
 ---
  
@@ -42,6 +51,9 @@ Servidor programado en nodeJS, montado en una instancia de AWS EC2
 * Balanceador de carga: <br>
 Para distribuir las peticiones de los usuarios entre los dos servidores se utilizó el servicio de AWS Load Balancing.
 
+* Análisis de imágenes: <br>
+Se utilizó el servicio de AWS Rekognition.
+
 
 * App web: <br>
 La aplicación web fue desarrollada con el framework React.
@@ -51,7 +63,7 @@ La aplicación web fue desarrollada con el framework React.
 ---
 
 
-### *Servicios Utilizados* <a name="Servicios"></a>
+### *Servicios Utilizados:* <a name="Servicios"></a>
 ---
 
 ### *AWS S3*
@@ -130,3 +142,72 @@ Configuramos nombre y puerto
 Agregamos las instancias que formaran parte del balanceador
 <img src="src/elb10.png">
 Creamos el load balancer.
+
+### AWS Lambda
+---
+AWS Lambda es un servicio informático sin servidor y basado en eventos que le permite ejecutar código para prácticamente cualquier tipo de aplicación o servicio backend sin necesidad de aprovisionar o administrar servidores.
+
+En el proyecto se implementaron funciones lambda para utilizar el servicio de aws simple notification service atraves del aws-sdk y node js.
+
+Para crear una nueva función desde la consola le damos clic en crear una función
+<img src="src/l1.png">
+
+Configuramos las distinas opciones como el nombre, lenguaje de programación, permisos.
+
+<img src="src/l2.png">
+
+Programamos nuestra funcion, para guardar le damos en deploy. Tambien podemos testear nuestra funcion.
+
+<img src="src/l3.png">
+
+### AWS Api gateway
+---
+Amazon API Gateway es un servicio completamente administrado que facilita a los desarrolladores la creación, la publicación, el mantenimiento, el monitoreo y la protección de API a cualquier escala. Las API actúan como la "puerta de entrada" para que las aplicaciones accedan a los datos.
+
+A traves de la api gateway el frontend en react puede hacer uso de las funciones lambda previamente creadas.
+
+Desde la consola en el servicio de api gateway le damos en crear API.
+
+<img src="src/api1.png">
+
+En nuestro caso seleccionamos crear api rest
+
+<img src="src/api2.png">
+
+Configuramos las distintas opciones, como nombre, protocolo, entre otras opciones.
+
+<img src="src/api3.png">
+
+En nuestra api podemos crear recursos y métodos donde podemos hacer uso de las funciones lambda.
+
+<img src="src/api4.png">
+
+Tenemos la opcion de habilitar CORS. Para implementar nuestra api le damos en implementar, seleccionamos o creamos una nueva fase.
+
+<img src="src/api5.png">
+
+### AWS Simple Notification Service
+---
+
+Amazon SNS es un servicio que permite enviar notificaciones de inserción a aplicaciones móviles, mensajes de texto a números de teléfonos móviles y correos electrónicos de texto sin formato a direcciones de correo electrónico. Puede distribuir mensajes con un tema o publicar en puntos de enlace móviles directamente.
+
+<img src="src/sns1.png">
+
+En el proyecto se implemento este servicio a traves de funciones lambda utilizando node js.
+
+A continuacion se muestran como usar SNS desde la consola de amazon. Para crear un nuevo tema damos en crear tema.
+
+<img src="src/sns2.png">
+
+Configuramos los protocolos de suscripcion, nombre del tema entre otras opciones. 
+
+<img src="src/sns3.png">
+
+Podemos gestionar las suscripciones de los distintos temas.
+
+<img src="src/sns4.png">
+
+Para enviar un mensaje, entramos al tema y luego en publicar mensaje.
+
+
+<img src="src/sns5.png">
