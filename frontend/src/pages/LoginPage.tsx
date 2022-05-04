@@ -41,6 +41,7 @@ export const LoginPage = () => {
           <input
             type="text"
             className="form-control"
+            autoComplete="off"
             name="carnetUsuario"
             value={carnetUsuario}
             onChange={(ev) => onChangeForm(ev)}

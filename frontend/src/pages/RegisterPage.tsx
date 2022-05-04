@@ -81,6 +81,7 @@ export const RegisterPage = () => {
           <input
             type="text"
             name='nombreUsuario'
+            autoComplete='off'
             value={nombreUsuario}
             onChange={onChangeForm}
             className="form-control" />
@@ -92,6 +93,7 @@ export const RegisterPage = () => {
           <input
             type="text"
             name='carnetUsuario'
+            autoComplete='off'
             value={carnetUsuario}
             onChange={onChangeForm}
             className="form-control" />
