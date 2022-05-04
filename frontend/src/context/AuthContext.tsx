@@ -17,7 +17,8 @@ interface IContextProps {
   auth: initState;
   login: (carnetUsuario: string, claveUsuario: string) => Promise<boolean>
   logout: () => boolean;
-  register: (nombreUsuario: string, carnetUsuario: string, carreraUsuario: string, claveUsuario: string, file: string) => Promise<void>
+  register: (nombreUsuario: string, carnetUsuario: string, carreraUsuario: string, claveUsuario: string, file: string) => Promise<void>;
+  updateUser: (carnetUsuario: string, fotoPerfil: string) => Promise<void>;
 }
 export const AuthContext = createContext({} as IContextProps);
 
@@ -117,14 +118,39 @@ export const AuthProvider = ({ children }: any) => {
   }
 
 
+  const updateUser = async (nombreUsuario: string, file: string) => {
 
+    let idUsuario = auth.uid;
+
+    await axios.put(`${process.env.REACT_APP_BACKEND}/actualizar`,
+      {
+        idUsuario,
+        nombreUsuario,
+        file
+      })
+      .then((response) => {
+        console.log(response);
+
+        if(response.data.status_login) {
+          Swal.fire('Success!', 'Your user has been updated succesfully', 'success')
+        }else {
+          Swal.fire('Error', 'Error updating your user', 'error')
+        }
+
+      })
+      .catch((error) => {
+        console.log(error);
+        Swal.fire('Error', 'Error updating your user', 'error')
+      })
+  }
 
   return (
     <AuthContext.Provider value={{
       auth,
       register,
       login,
-      logout
+      logout,
+      updateUser
     }}>
       {children}
     </AuthContext.Provider>

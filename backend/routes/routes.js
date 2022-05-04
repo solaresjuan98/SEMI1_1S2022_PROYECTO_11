@@ -12,6 +12,7 @@ const appRouter = Router();
 appRouter.get('/users', getUsers);
 appRouter.post('/login', login);
 appRouter.post('/registrar_usuario', signup);
+appRouter.put('/actualizar', editUser);
 
 // * NOTES
 appRouter.post('/agregar_nota', addNote)

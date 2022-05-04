@@ -5,14 +5,21 @@ import { useForm } from '../hooks/useForm';
 
 export const HomePage = () => {
 
-  const { auth } = useContext(AuthContext);
+  const { auth, updateUser } = useContext(AuthContext);
 
-  const { onChangeForm } = useForm({});
+  const { formData, onChangeForm, onChangeFile } = useForm({
+    nombreUsuario: auth.nombreUsuario,
+    carnetUsuario: auth.carnetUsuario,
+    file: '',
+  });
 
   const { labelsResponse, loading } = useAnalysis();
   //console.log(auth);
   const onUpdateUser = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
+
+    //let fotoPerfil = formData.file;
+    await updateUser(formData.nombreUsuario, formData.file);
   }
 
   return (
@@ -26,15 +33,15 @@ export const HomePage = () => {
           <h2>My user</h2>
           <hr />
 
-
+          {/** EDIT USER */}
           <form onSubmit={onUpdateUser} className="animate__animated animate__fadeInDown">
             <div className="form-group">
               <label className="form-label mt-1">Name:</label>
               <input
-                readOnly
+                //readOnly
                 type="text"
                 name='nombreUsuario'
-                value={auth.nombreUsuario}
+                value={formData.nombreUsuario}
                 onChange={onChangeForm}
                 className="form-control" />
               {/* <div className="valid-feedback">Success! You've done it.</div> */}
@@ -45,6 +52,7 @@ export const HomePage = () => {
               <input
                 type="text"
                 name='carnetUsuario'
+                readOnly
                 value={auth.carnetUsuario}
                 onChange={onChangeForm}
                 className="form-control" />
@@ -57,11 +65,11 @@ export const HomePage = () => {
                 className="form-control"
                 type="file"
                 name="file"
-              //onChange={onChangeFile}
+                onChange={onChangeFile}
               />
             </div>
 
-            <div className="form-group">
+            {/* <div className="form-group">
               <label className="form-label mt-1">Enter your password before update your account:</label>
               <input
                 type="password"
@@ -72,14 +80,17 @@ export const HomePage = () => {
               //className={`form-control ${confimedBeforeUpdate ? 'is-valid' : 'is-invalid'} `} 
               />
               <div className="invalid-feedback">Enter your password before update.</div>
-              {/* <div className="valid-feedback">Password confirmed</div> */}
-            </div>
+              
+            </div> */}
             <div className="form-group d-grid gap-2 mt-3">
-              <button className='btn btn-success' disabled={true}>Update Account</button>
+              <button className='btn btn-success'>Update Account</button>
             </div>
 
           </form>
         </div>
+
+
+        {/** PHOTO ANALYSIS */}
         <div className="col-6">
           <h2>Your photo analysys: </h2>
           <hr />
@@ -96,7 +107,9 @@ export const HomePage = () => {
               </div>
             </div>
           </div>
-          
+
+
+
           <div className='container mt-4' style={{ width: '100%' }}>
             <h5>Labels (AWS Rekognition) </h5>
             {

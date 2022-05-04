@@ -126,14 +126,14 @@ const login = async (req, res = response) => {
 
 const editUser = async (req, res = response) => {
 
-    const { uid, usuario, file } = req.body;
+    const { nombreUsuario, file, idUsuario} = req.body;
 
     try {
 
         if (!file || file.length !== 0) {
-            await queries.updateUserWithPhoto(usuario, file, uid);
+            await queries.updateUserWithPhoto(nombreUsuario, file, idUsuario);
         } else {
-            await queries.updateUser(usuario, uid);
+            await queries.updateUser(nombreUsuario, idUsuario);
         }
 
         res.status(200).json({

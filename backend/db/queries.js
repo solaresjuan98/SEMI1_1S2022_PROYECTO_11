@@ -46,12 +46,15 @@ const login = (userBody) => {
 
 
 
-const updateUser = (usuario, uid) => {
+const updateUser = (nombreUsuario, idUsuario) => {
 
     return new Promise((resolve, reject) => {
 
         let query = `
-        UPDATE Usuario SET usuario = '${usuario}' where idUsuario = ${uid};
+        update Usuario
+            set nombreUsuario = '${nombreUsuario}'
+        where idUsuario = ${idUsuario};
+
         `
         pool.query(query, (err, res) => {
 
@@ -61,6 +64,27 @@ const updateUser = (usuario, uid) => {
     });
 
 }
+
+const updateUserWithPhoto = (nombreUsuario, file, idUsuario) => {
+
+    return new Promise((resolve, reject) => {
+
+        let query = `
+        update Usuario
+            set nombreUsuario = '${nombreUsuario}',
+            fotoPerfil    = '${file}'
+        where idUsuario = ${idUsuario};
+
+        `
+        pool.query(query, (err, res) => {
+
+            if (err) reject(err);
+            resolve(res);
+        });
+    });
+
+}
+
 
 const getUsers = () => {
 
@@ -320,6 +344,7 @@ let queries = {
     createUser,
     login,
     updateUser,
+    updateUserWithPhoto,
     getUsers,
     // * NOTES
     createNote,
